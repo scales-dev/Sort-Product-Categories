@@ -81,6 +81,11 @@ public class Main {
         System.out.println(row.get("CategoryPath"));
         System.out.println(row.get("CategoryManagement"));
         System.out.println(Arrays.toString(CATEGORIES));
+        if (Arrays.stream(FAVOURITES).toList().contains(row.get("Name"))) {
+          System.out.println("FAVOURITE");
+          System.out.println("FAVOURITE");
+          System.out.println("FAVOURITE");
+        }
 
         String[] categories = findCategories(input);
 
