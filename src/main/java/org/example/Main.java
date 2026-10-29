@@ -1,10 +1,8 @@
 package org.example;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
   private static final String[] CATEGORIES = {
@@ -72,8 +70,10 @@ public class Main {
     // funny enough, after nearly 7 years of java, this is my first time reading an input outside clash of code
     Scanner input = new Scanner(System.in);
 
+    String categoryPath = "";
+    String categoryManagement = "";
+
     for (Map<String, String> row : csv) {
-      System.out.println(row);
       // code like yoda
       if ("Add Product".equals(row.get("Action"))) {
         System.out.println(row.get("Name"));
@@ -82,10 +82,49 @@ public class Main {
         System.out.println(row.get("CategoryManagement"));
         System.out.println(Arrays.toString(CATEGORIES));
 
-        String categories = input.nextLine();
+        String[] categories = findCategories(input);
+
+        categoryPath = categories[0];
+        categoryManagement = Arrays.stream(categories).skip(1).collect(Collectors.joining(":"));
       }
+
+      System.out.println(categoryPath+":"+categoryManagement);
+      row.put("CategoryPath", categoryPath);
+      row.put("CategoryManagement", categoryManagement);
     }
 
     CsvUtil.writeCsv(CSV_PATH.getParent().resolve("OUTPUT.csv"), csv);
+  }
+
+  private static String[] findCategories(Scanner input) {
+    String[] categories = input.nextLine().split(",");
+    String[] matchedCategories = new String[categories.length + 1];
+    int i = 0;
+
+    for (String inputCategory : categories) {
+      List<String> matchingCategories = Arrays.stream(CATEGORIES)
+              .filter(category -> category.toLowerCase().startsWith(inputCategory.trim().toLowerCase()))
+              .toList();
+
+      if (matchingCategories.isEmpty()) {
+        System.out.println(inputCategory + " has no matches! sorry");
+        // can stack overflow, niche error
+        return findCategories(input);
+      }
+      if (matchingCategories.size() > 1) {
+        System.out.println(inputCategory + " matched to: " + matchingCategories + " try again...");
+        return findCategories(input);
+      }
+
+      matchedCategories[i++] = getCategoryPath(matchingCategories.getFirst());
+    }
+
+    matchedCategories[i] = getCategoryPath("");
+
+    return matchedCategories;
+  }
+
+  private static String getCategoryPath(String path) {
+    return "Home > Shop Online" + (path.isBlank() ? "" : " > " + path);
   }
 }
