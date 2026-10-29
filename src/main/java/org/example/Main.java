@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 public class Main {
   private static final String[] CATEGORIES = {
           "Apples",
+          "Pears",
           "Bananas",
           "Citrus",
           "Mangoes",
@@ -15,16 +16,16 @@ public class Main {
           "Chilli's & Peppers",
           "Coconuts",
           "Dates",
-          "Dragon Fruit",
-          "Durian",
-          "Jackfruit",
-          "Passion Fruit",
+          "Dragon Fruits",
+          "Durians",
+          "Jackfruits",
+          "Passion Fruits",
           "Soursop",
-          "Luxury Fruit",
+          "Luxury Fruits",
           "Flavours & Aromatics",
-          "Sweet Fruit",
-          "Sour Fruit",
-          "Juice",
+          "Sweet Fruits",
+          "Sour Fruits",
+          "Juices",
           "Selection Boxes",
           "Alkaline Fruits",
           "Unique Fruits",
@@ -32,6 +33,7 @@ public class Main {
           "Gifts",
           "Dried Fruits",
           "Favourites",
+          "TODO"
   };
 
   private static final String[] FAVOURITES = {
@@ -96,6 +98,8 @@ public class Main {
       System.out.println(categoryPath+":"+categoryManagement);
       row.put("CategoryPath", categoryPath);
       row.put("CategoryManagement", categoryManagement);
+
+      System.out.println();
     }
 
     CsvUtil.writeCsv(CSV_PATH.getParent().resolve("OUTPUT.csv"), csv);
